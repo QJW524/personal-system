@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Qiu 的个人系统',
+  title: '邱继伟 的个人系统',
   description: '一个聚焦真实项目与长期记录的个人网站。',
 };
 
