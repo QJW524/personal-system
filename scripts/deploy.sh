@@ -1,6 +1,23 @@
 #!/usr/bin/env sh
 set -eu
 
+if docker compose version >/dev/null 2>&1; then
+  COMPOSE_BIN='docker compose'
+elif command -v docker-compose >/dev/null 2>&1; then
+  COMPOSE_BIN='docker-compose'
+else
+  echo 'Docker Compose is required (docker compose or docker-compose)'
+  exit 1
+fi
+
+compose() {
+  if [ "$COMPOSE_BIN" = 'docker-compose' ]; then
+    docker-compose "$@"
+  else
+    docker compose "$@"
+  fi
+}
+
 if [ -z "${APP_DIR:-}" ]; then
   echo 'APP_DIR is required'
   exit 1
@@ -17,8 +34,8 @@ git fetch --all --prune
 git checkout main
 git pull --ff-only origin main
 
-docker compose build --pull
-docker compose up -d db
-docker compose run --rm --no-deps web npm run db:deploy
-docker compose up -d --remove-orphans web
-docker compose ps
+compose build --pull
+compose up -d db
+compose run --rm --no-deps migrate
+compose up -d --remove-orphans web
+compose ps

@@ -21,6 +21,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: runner
     container_name: personal-system-web
     restart: unless-stopped
     depends_on:
@@ -31,6 +32,19 @@ services:
       NODE_ENV: production
     ports:
       - '3000:3000'
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-personal_system}?schema=public
+    command: ['npm', 'run', 'db:deploy']
+    restart: 'no'
 
 volumes:
   postgres_data:
