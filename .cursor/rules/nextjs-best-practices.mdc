@@ -1,0 +1,14 @@
+---
+description: Next.js + Prisma engineering baseline for this project
+alwaysApply: true
+---
+
+# Next.js Best Practices
+
+- Prefer Server Components by default. Use Client Components only for browser state or event handlers.
+- Keep data access in `src/lib/*` or route handlers; never call Prisma directly from deeply nested UI components.
+- For DB-backed pages, set explicit rendering strategy (`dynamic` or cache/revalidate) to avoid accidental build-time failures.
+- Each route should provide graceful fallback UI when DB is unavailable.
+- API routes return structured JSON with stable keys and HTTP status.
+- Keep environment variables explicit: `DATABASE_URL`, `POSTGRES_*`, `VPS_*`.
+- Production build must pass `npm run lint` and `npm run build` before deployment.

@@ -1,0 +1,14 @@
+---
+description: UI and copywriting rules to avoid generic AI-style pages
+globs: src/app/**/*.tsx
+alwaysApply: false
+---
+
+# UI Writing And Layout
+
+- Avoid generic slogans. Use concrete statements tied to real work, metrics, or outcomes.
+- Keep layout calm: clear hierarchy, moderate whitespace, and limited visual effects.
+- Reduce card stacking and decorative gradients unless they communicate meaning.
+- Prefer semantic HTML sections and concise headings.
+- Microcopy should sound human and specific, not hype-heavy.
+- Animation is optional and subtle; never block reading flow.

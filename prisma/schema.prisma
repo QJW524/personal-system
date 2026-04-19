@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SiteProfile {
+  id          Int      @id @default(1)
+  siteTitle   String
+  tagline     String
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  highlights  Highlight[]
+}
+
+model Highlight {
+  id            Int         @id @default(autoincrement())
+  title         String
+  summary       String
+  profileId     Int
+  profile       SiteProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime    @default(now())
+
+  @@index([profileId])
+}
