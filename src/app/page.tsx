@@ -32,7 +32,7 @@ export default async function Home() {
       <main className={styles.main}>
         <section className={styles.hero}>
           <p className={styles.badge}>Personal Website</p>
-          <h1>{profile?.siteTitle ?? 'Qiu 的个人系统'}</h1>
+          <h1>{profile?.siteTitle ?? '周丽蛛的个人系统'}</h1>
           <p className={styles.tagline}>
             {profile?.tagline ?? '用一个稳定的站点记录项目、思考和可复用的方法。'}
           </p>
