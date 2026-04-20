@@ -1,3 +1,13 @@
+# compose 编排说明：
+# - db: PostgreSQL 服务，持久化到 postgres_data
+# - web: Next.js 生产服务（Dockerfile 的 runner 阶段）
+# - migrate: 一次性迁移服务（Dockerfile 的 builder 阶段，内含 prisma CLI）
+#
+# 执行顺序（由 deploy.sh 控制）：
+# 1) up db
+# 2) run migrate
+# 3) up web
+
 services:
   db:
     image: postgres:16-alpine
@@ -43,6 +53,7 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-personal_system}?schema=public
+    # 只执行迁移，不常驻
     command: ['npm', 'run', 'db:deploy']
     restart: 'no'
 

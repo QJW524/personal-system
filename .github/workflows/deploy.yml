@@ -1,3 +1,14 @@
+# 这个工作流只做一件事：触发 VPS 上的 deploy.sh
+# 触发时机：
+# - push 到 main
+# - 手动 workflow_dispatch
+#
+# 依赖的 Environment secrets（environment: product）：
+# - VPS_SSH_KEY: 登录 VPS 的私钥全文
+# - VPS_HOST: VPS IP 或域名
+# - VPS_USER: 登录用户（建议 deploy）
+# - APP_DIR: 项目在 VPS 的绝对路径
+
 name: deploy
 
 on:
@@ -9,6 +20,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # 必须绑定到 product，才能读取 product 环境下的 secrets
     environment: product
     steps:
       - name: Checkout
