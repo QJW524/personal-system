@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 type Params = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 function parseId(id: string) {
@@ -12,7 +12,7 @@ function parseId(id: string) {
 
 export async function PATCH(request: Request, { params }: Params) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const itemId = parseId(id);
     if (!itemId) {
       return NextResponse.json({ error: '无效的记录 ID。' }, { status: 400 });
@@ -39,7 +39,7 @@ export async function PATCH(request: Request, { params }: Params) {
 
 export async function DELETE(_: Request, { params }: Params) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const itemId = parseId(id);
     if (!itemId) {
       return NextResponse.json({ error: '无效的记录 ID。' }, { status: 400 });
