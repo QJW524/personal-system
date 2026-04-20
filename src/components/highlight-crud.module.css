@@ -1,0 +1,105 @@
+.wrapper {
+  display: grid;
+  gap: 12px;
+}
+
+.createBox {
+  border: 1px solid #eaecf0;
+  border-radius: 10px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  background: #ffffff;
+}
+
+.createBox input,
+.createBox textarea,
+.editBox input,
+.editBox textarea {
+  width: 100%;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+  color: #101828;
+  font-family: inherit;
+}
+
+.createBox button,
+.rowActions button {
+  width: fit-content;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #344054;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.createBox button:disabled,
+.rowActions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.list {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.item {
+  border: 1px solid #eaecf0;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 12px;
+}
+
+.item h3 {
+  margin-bottom: 6px;
+  color: #101828;
+  font-size: 16px;
+}
+
+.item p {
+  color: #475467;
+  line-height: 1.6;
+}
+
+.rowActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.dangerButton {
+  border-color: #fda29b !important;
+  color: #b42318 !important;
+}
+
+.ghostButton {
+  border-color: #d0d5dd !important;
+}
+
+.editBox {
+  display: grid;
+  gap: 8px;
+}
+
+.emptyItem {
+  border: 1px dashed #d0d5dd;
+  border-radius: 10px;
+  padding: 12px;
+  background: #fcfcfd;
+}
+
+.successText {
+  color: #027a48 !important;
+  font-size: 14px;
+}
+
+.errorText {
+  color: #b42318 !important;
+  font-size: 14px;
+}

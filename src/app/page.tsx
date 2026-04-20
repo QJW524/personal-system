@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import { HighlightCrud } from '@/components/highlight-crud';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -46,20 +47,12 @@ export default async function Home() {
 
         <section className={styles.section}>
           <h2>最近在做的事</h2>
-          <ul>
-            {(profile?.highlights ?? []).map((item) => (
-              <li key={item.id}>
-                <h3>{item.title}</h3>
-                <p>{item.summary}</p>
-              </li>
-            ))}
-            {!profile && (
-              <li>
-                <h3>数据库尚未初始化</h3>
-                <p>先启动 Postgres，再执行 Prisma migrate 和 seed 即可恢复。</p>
-              </li>
-            )}
-          </ul>
+          <HighlightCrud initialHighlights={profile?.highlights ?? []} />
+          {!profile && (
+            <p className={styles.notice}>
+              数据库尚未初始化。你可以直接在下面新增一条，系统会自动创建基础资料。
+            </p>
+          )}
         </section>
 
         <section className={styles.section}>
