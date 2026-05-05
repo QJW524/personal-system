@@ -1,0 +1,32 @@
+---
+description: Git 分支与提交约定，以及 GitHub Issues / Projects 协作方式
+alwaysApply: true
+---
+
+# Git 与 GitHub 团队规范（最小集）
+
+## 分支与合并
+
+- 默认分支禁止直推大改动；用 PR 合并。禁止对共享默认分支 `--force`。
+- 分支命名：`feat/`、`fix/`、`chore/`、`docs/` + 简短英文或 kebab-case（例：`feat/login-session`）。
+- 一个 PR 只做一件事，便于审查与回滚。
+
+## 提交信息
+
+- 使用 [Conventional Commits](https://www.conventionalcommits.org/)：`feat:`、`fix:`、`chore:`、`docs:`、`refactor:`、`test:` 等；需要时注明 `BREAKING CHANGE:`。
+
+## Issues
+
+- 有独立工作项（bug、功能、技术债、讨论结论）时开 Issue；标题动词化、描述含复现或验收标准。
+- 用 Labels 区分类型与优先级；Assignee 表示当前负责人。
+- PR 正文用 `Fixes #123` / `Closes #123` 关联 Issue，合并后自动关闭。
+
+## Projects（看板）
+
+- 用 Project 视图管理迭代：列表示状态（如 待办 / 进行中 / 审查中 / 完成）。
+- Issue（及关联 PR）应出现在对应 Project 中，状态与列一致；跨仓库规划时使用组织级 Project。
+
+## 与 Agent 协作
+
+- 若已启用 GitHub MCP：查 Issue/PR、补描述、对齐里程碑时优先用 MCP，避免与网页信息不一致。
+- 未启用 MCP 时：以仓库内 Issue/PR 链接与编号为准，不臆测状态。

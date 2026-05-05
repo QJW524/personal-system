@@ -1,38 +1,58 @@
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { HighlightCrud } from '@/components/highlight-crud';
+import { LogoutButton } from '@/components/logout-button';
+import { SESSION_COOKIE_NAME } from '@/lib/auth/cookies';
+import { getSession } from '@/lib/auth/session';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
 
-async function getHomepageData() {
-  try {
-    const profile = await prisma.siteProfile.findUnique({
-      where: { id: 1 },
-      include: {
-        highlights: {
-          orderBy: {
-            createdAt: 'asc',
-          },
+export default async function Home() {
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  if (!sessionId) {
+    redirect('/login');
+  }
+
+  const session = await getSession(sessionId);
+  if (!session) {
+    redirect('/login');
+  }
+
+  const profile = await prisma.siteProfile.upsert({
+    where: { userId: session.userId },
+    update: {},
+    create: {
+      userId: session.userId,
+      siteTitle: `${session.username} 的个人系统`,
+      tagline: '用一个稳定的站点记录项目、思考和可复用的方法。',
+    },
+    include: {
+      highlights: {
+        orderBy: {
+          createdAt: 'asc',
         },
       },
-    });
-
-    return profile;
-  } catch (error) {
-    console.error('Failed to load homepage data', error);
-    return null;
-  }
-}
-
-export default async function Home() {
-  const profile = await getHomepageData();
+    },
+  });
 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
+        <section className={styles.topbar}>
+          <div>
+            <p className={styles.badge}>已登录</p>
+            <p className={styles.userText}>
+              {session.username} · {session.email}
+            </p>
+          </div>
+          <LogoutButton />
+        </section>
+
         <section className={styles.hero}>
-          <p className={styles.badge}>Personal Website</p>
           <h1>{profile?.siteTitle ?? '周丽蛛的个人系统'}</h1>
           <p className={styles.tagline}>
             {profile?.tagline ?? '用一个稳定的站点记录项目、思考和可复用的方法。'}
@@ -45,7 +65,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className={styles.section}>
+        <section className={styles.sectionCard}>
           <h2>最近在做的事</h2>
           <HighlightCrud initialHighlights={profile?.highlights ?? []} />
           {!profile && (
@@ -55,7 +75,7 @@ export default async function Home() {
           )}
         </section>
 
-        <section className={styles.section}>
+        <section className={styles.sectionCard}>
           <h2>站点基线</h2>
           <p>这版先把工程基线打好：Next.js + Prisma + Docker + GitHub Actions。</p>
           <p>内容后续按你的真实经历填充，不走 AI 模板文案。</p>

@@ -27,6 +27,16 @@ services:
       timeout: 5s
       retries: 8
 
+  redis:
+    image: redis:7-alpine
+    container_name: personal-system-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
+      - redis_data:/data
+
   web:
     build:
       context: .
@@ -37,8 +47,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-personal_system}?schema=public
+      REDIS_URL: redis://redis:6379
       NODE_ENV: production
     ports:
       - '3000:3000'
@@ -51,11 +64,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-personal_system}?schema=public
+      REDIS_URL: redis://redis:6379
     # 只执行迁移，不常驻
     command: ['npm', 'run', 'db:deploy']
     restart: 'no'
 
 volumes:
   postgres_data:
+  redis_data:

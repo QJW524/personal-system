@@ -8,12 +8,14 @@ datasource db {
 }
 
 model SiteProfile {
-  id          Int      @id @default(1)
-  siteTitle   String
-  tagline     String
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
-  highlights  Highlight[]
+  id         Int       @id @default(autoincrement())
+  userId     Int?      @unique
+  user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  siteTitle  String
+  tagline    String
+  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime  @default(now())
+  highlights Highlight[]
 }
 
 model Highlight {
@@ -26,4 +28,23 @@ model Highlight {
   createdAt     DateTime    @default(now())
 
   @@index([profileId])
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  username       String    @unique
+  email          String    @unique
+  passwordHash   String
+  status         UserStatus @default(ACTIVE)
+  loginFailCount Int       @default(0)
+  lockedUntil    DateTime?
+  lastLoginAt    DateTime?
+  profile        SiteProfile?
+  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime  @default(now())
+}
+
+enum UserStatus {
+  ACTIVE
+  DISABLED
 }

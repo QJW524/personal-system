@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getSessionFromRequest } from '@/lib/auth/request-session';
 
 type Params = {
   params: Promise<{ id: string }>;
@@ -12,6 +13,11 @@ function parseId(id: string) {
 
 export async function PATCH(request: Request, { params }: Params) {
   try {
+    const session = await getSessionFromRequest(request);
+    if (!session) {
+      return NextResponse.json({ error: '未登录或登录状态失效。' }, { status: 401 });
+    }
+
     const { id } = await params;
     const itemId = parseId(id);
     if (!itemId) {
@@ -25,9 +31,21 @@ export async function PATCH(request: Request, { params }: Params) {
       return NextResponse.json({ error: '标题和内容不能为空。' }, { status: 400 });
     }
 
-    const item = await prisma.highlight.update({
-      where: { id: itemId },
+    const updateResult = await prisma.highlight.updateMany({
+      where: {
+        id: itemId,
+        profile: {
+          userId: session.userId,
+        },
+      },
       data: { title, summary },
+    });
+    if (updateResult.count === 0) {
+      return NextResponse.json({ error: '记录不存在或无权限。' }, { status: 404 });
+    }
+
+    const item = await prisma.highlight.findUnique({
+      where: { id: itemId },
     });
 
     return NextResponse.json({ item });
@@ -37,17 +55,30 @@ export async function PATCH(request: Request, { params }: Params) {
   }
 }
 
-export async function DELETE(_: Request, { params }: Params) {
+export async function DELETE(request: Request, { params }: Params) {
   try {
+    const session = await getSessionFromRequest(request);
+    if (!session) {
+      return NextResponse.json({ error: '未登录或登录状态失效。' }, { status: 401 });
+    }
+
     const { id } = await params;
     const itemId = parseId(id);
     if (!itemId) {
       return NextResponse.json({ error: '无效的记录 ID。' }, { status: 400 });
     }
 
-    await prisma.highlight.delete({
-      where: { id: itemId },
+    const deleteResult = await prisma.highlight.deleteMany({
+      where: {
+        id: itemId,
+        profile: {
+          userId: session.userId,
+        },
+      },
     });
+    if (deleteResult.count === 0) {
+      return NextResponse.json({ error: '记录不存在或无权限。' }, { status: 404 });
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

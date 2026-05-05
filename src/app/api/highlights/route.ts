@@ -1,11 +1,31 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getSessionFromRequest } from '@/lib/auth/request-session';
 
-const DEFAULT_PROFILE_ID = 1;
+async function getProfileIdByUser(userId: number) {
+  const profile = await prisma.siteProfile.upsert({
+    where: { userId },
+    update: {},
+    create: {
+      userId,
+      siteTitle: '我的个人系统',
+      tagline: '记录项目、思考和可复用的方法。',
+    },
+    select: { id: true },
+  });
 
-export async function GET() {
+  return profile.id;
+}
+
+export async function GET(request: Request) {
+  const session = await getSessionFromRequest(request);
+  if (!session) {
+    return NextResponse.json({ error: '未登录或登录状态失效。' }, { status: 401 });
+  }
+
+  const profileId = await getProfileIdByUser(session.userId);
   const items = await prisma.highlight.findMany({
-    where: { profileId: DEFAULT_PROFILE_ID },
+    where: { profileId },
     orderBy: {
       createdAt: 'asc',
     },
@@ -16,6 +36,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const session = await getSessionFromRequest(request);
+    if (!session) {
+      return NextResponse.json({ error: '未登录或登录状态失效。' }, { status: 401 });
+    }
+
     const body = (await request.json()) as { title?: string; summary?: string };
     const title = body.title?.trim();
     const summary = body.summary?.trim();
@@ -24,21 +49,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: '标题和内容不能为空。' }, { status: 400 });
     }
 
-    await prisma.siteProfile.upsert({
-      where: { id: DEFAULT_PROFILE_ID },
-      update: {},
-      create: {
-        id: DEFAULT_PROFILE_ID,
-        siteTitle: 'Qiu 的个人系统',
-        tagline: '记录我做过的事，而不是套模板的自我介绍。',
-      },
-    });
+    const profileId = await getProfileIdByUser(session.userId);
 
     const item = await prisma.highlight.create({
       data: {
         title,
         summary,
-        profileId: DEFAULT_PROFILE_ID,
+        profileId,
       },
     });
 

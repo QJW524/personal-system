@@ -1,0 +1,220 @@
+.page {
+  min-height: 100vh;
+  padding: 32px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top left, #e7efff 0%, #f5f7fb 45%, #f7f8fc 100%);
+}
+
+.layout {
+  width: 100%;
+  max-width: 980px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 48px rgba(16, 24, 40, 0.1);
+}
+
+.brandPanel {
+  background: linear-gradient(160deg, #155eef 0%, #0b4ed3 60%, #083ea9 100%);
+  color: #ffffff;
+  padding: 44px 36px;
+  display: grid;
+  align-content: center;
+  gap: 16px;
+}
+
+.brandPanel h1 {
+  font-size: 34px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.brandPanel p {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+}
+
+.brandBadge {
+  width: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.featureList {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.featureList li {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.authCard {
+  width: 100%;
+  border: 1px solid #e4e7ec;
+  background: #ffffff;
+  padding: 30px 28px;
+  display: grid;
+  align-content: center;
+  gap: 16px;
+}
+
+.header {
+  display: grid;
+  gap: 4px;
+}
+
+.header h2 {
+  font-size: 27px;
+  letter-spacing: -0.01em;
+  color: #101828;
+}
+
+.header p {
+  color: #667085;
+  font-size: 14px;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.tab,
+.tabActive {
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #344054;
+  padding: 9px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tabActive {
+  border-color: #155eef;
+  color: #155eef;
+  background: #eff4ff;
+}
+
+.block {
+  display: grid;
+  gap: 10px;
+}
+
+.form {
+  display: grid;
+  gap: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field span {
+  font-size: 14px;
+  color: #344054;
+}
+
+.field input {
+  width: 100%;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #101828;
+  transition: border-color 0.2s ease;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #155eef;
+  box-shadow: 0 0 0 3px rgba(21, 94, 239, 0.12);
+}
+
+.primaryButton,
+.secondaryButton {
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.primaryButton {
+  background: #155eef;
+  color: #ffffff;
+}
+
+.primaryButton:hover {
+  background: #004ee0;
+}
+
+.secondaryButton {
+  background: #f2f4f7;
+  color: #344054;
+  border-color: #d0d5dd;
+}
+
+.secondaryButton:hover {
+  background: #eaecf0;
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.successBanner,
+.errorBanner {
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.successBanner {
+  color: #067647;
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+}
+
+.errorBanner {
+  color: #b42318;
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 16px;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    border-radius: 14px;
+  }
+
+  .brandPanel {
+    padding: 24px 18px;
+    gap: 10px;
+  }
+
+  .brandPanel h1 {
+    font-size: 24px;
+  }
+
+  .authCard {
+    padding: 18px 16px;
+  }
+}

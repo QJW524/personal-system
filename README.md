@@ -10,10 +10,10 @@
 npm install
 ```
 
-2. 启动数据库（自动创建 `POSTGRES_DB` 对应库）：
+2. 启动数据库与 Redis：
 
 ```bash
-docker compose up -d db
+docker compose up -d db redis
 ```
 
 3. 初始化数据库：
@@ -31,6 +31,24 @@ npm run dev
 ```
 
 访问 `http://localhost:3000`。
+
+## 登录模块（Redis 会话）
+
+- 注册：`POST /api/auth/register`
+- 登录：`POST /api/auth/login`
+- 登出：`POST /api/auth/logout`
+- 当前会话：`GET /api/auth/me`
+
+请求参数：
+
+- 注册：`{ username, email, password }`
+- 登录：`{ identifier, password }`，`identifier` 支持用户名或邮箱
+
+需要新增环境变量：
+
+- `REDIS_URL`：Redis 连接串
+- `SESSION_COOKIE_NAME`：会话 Cookie 名称
+- `SESSION_TTL_SECONDS`：会话有效秒数（默认 7 天）
 
 ## 关键脚本
 
