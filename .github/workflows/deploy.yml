@@ -40,5 +40,7 @@ jobs:
         env:
           APP_DIR: ${{ secrets.APP_DIR }}
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+          # 远程 docker build / next build 耗时长，默认 SSH 易被中间设备或空闲超时掐断（Broken pipe / exit 255）
+          ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=12 \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             "export APP_DIR='${APP_DIR}'; sh '${APP_DIR}/scripts/deploy.sh'"
