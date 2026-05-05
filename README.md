@@ -10,10 +10,10 @@
 npm install
 ```
 
-2. 启动数据库与 Redis：
+2. 启动数据库与 Redis（需把 Redis 映射到本机供 `npm run dev`，见 `docker-compose.dev.yml`）：
 
 ```bash
-docker compose up -d db redis
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d db redis
 ```
 
 3. 初始化数据库：

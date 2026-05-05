@@ -1,0 +1,8 @@
+# 仅本地开发：把 Redis 暴露到本机，供宿主机上的 `npm run dev` 使用（.env 里 REDIS_URL=redis://localhost:6379）。
+# 用法：docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d db redis
+# 若本机 6379 已被占用，把下面改成例如 '127.0.0.1:16379:6379'，并同步改 .env 的 REDIS_URL。
+
+services:
+  redis:
+    ports:
+      - '127.0.0.1:6379:6379'
