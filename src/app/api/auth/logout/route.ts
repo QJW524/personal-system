@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { deleteSession } from '@/lib/auth/session';
-import { SESSION_COOKIE_NAME } from '@/lib/auth/cookies';
+import { getSessionCookieOptions, SESSION_COOKIE_NAME } from '@/lib/auth/cookies';
 
 function getCookieValue(cookieHeader: string | null, name: string) {
   if (!cookieHeader) {
@@ -25,13 +25,7 @@ export async function POST(request: Request) {
       data: { loggedOut: true },
     });
 
-    response.cookies.set(SESSION_COOKIE_NAME, '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 0,
-    });
+    response.cookies.set(SESSION_COOKIE_NAME, '', getSessionCookieOptions(request, { maxAge: 0 }));
 
     return response;
   } catch (error) {

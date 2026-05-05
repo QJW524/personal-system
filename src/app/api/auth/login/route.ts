@@ -163,7 +163,7 @@ export async function POST(request: Request) {
       data: payload,
     });
 
-    response.cookies.set(SESSION_COOKIE_NAME, sessionId, getSessionCookieOptions());
+    response.cookies.set(SESSION_COOKIE_NAME, sessionId, getSessionCookieOptions(request));
     return response;
   } catch (error) {
     console.error('Login failed', error);

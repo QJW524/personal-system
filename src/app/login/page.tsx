@@ -1,7 +1,6 @@
 'use client';
 
 import { FormEvent, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
 type AuthStatus = {
@@ -32,8 +31,18 @@ async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
   return data.data as T;
 }
 
+function readSafePostLoginPath(): string {
+  if (typeof window === 'undefined') {
+    return '/';
+  }
+  const raw = new URLSearchParams(window.location.search).get('redirect')?.trim() ?? '';
+  if (raw.startsWith('/') && !raw.startsWith('//')) {
+    return raw;
+  }
+  return '/';
+}
+
 export default function LoginPage() {
-  const router = useRouter();
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [registerUsername, setRegisterUsername] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
@@ -94,8 +103,7 @@ export default function LoginPage() {
       });
       setStatus({ type: 'success', text: '登录成功。' });
       setLoginPassword('');
-      router.push('/');
-      router.refresh();
+      window.location.assign(readSafePostLoginPath());
     } catch (error) {
       setStatus({ type: 'error', text: (error as Error).message });
     } finally {
