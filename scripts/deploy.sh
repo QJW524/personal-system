@@ -45,9 +45,9 @@ git fetch --all --prune
 git checkout main
 git pull --ff-only origin main
 
-# 先构建，再启动 db，再迁移，最后更新 web
+# 先构建，再启动 db/redis，再迁移，最后更新 web
 compose build --pull
-compose up -d db
+compose up -d db redis
 compose run --rm --no-deps migrate
 compose up -d --remove-orphans web
 compose ps

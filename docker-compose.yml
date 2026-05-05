@@ -1,15 +1,18 @@
 # compose 编排说明：
 # - db: PostgreSQL 服务，持久化到 postgres_data
+# - redis: Redis 服务（会话与登录限流共享存储），持久化到 redis_data
 # - web: Next.js 生产服务（Dockerfile 的 runner 阶段）
 # - migrate: 一次性迁移服务（Dockerfile 的 builder 阶段，内含 prisma CLI）
 #
 # 执行顺序（由 deploy.sh 控制）：
 # 1) up db
-# 2) run migrate
-# 3) up web
+# 2) up redis
+# 3) run migrate
+# 4) up web
 #
 # Redis 不映射宿主机端口：web 通过 REDIS_URL=redis://redis:6379 走 Docker 网络；
 # 避免与 VPS/本机已在 6379 监听的进程冲突。本机 npm run dev 见 docker-compose.dev.yml。
+# 在生产编排中，web 与 migrate 都连接同一个 Redis 服务（redis:6379），不是各自独立实例。
 
 services:
   db:
