@@ -1,17 +1,7 @@
 import { NextResponse } from 'next/server';
 import { deleteSession } from '@/lib/auth/session';
 import { getSessionCookieOptions, SESSION_COOKIE_NAME } from '@/lib/auth/cookies';
-
-function getCookieValue(cookieHeader: string | null, name: string) {
-  if (!cookieHeader) {
-    return null;
-  }
-  const target = cookieHeader
-    .split(';')
-    .map((item) => item.trim())
-    .find((item) => item.startsWith(`${name}=`));
-  return target ? target.split('=')[1] ?? null : null;
-}
+import { getCookieValue } from '@/lib/http/cookie-parse';
 
 export async function POST(request: Request) {
   try {

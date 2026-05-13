@@ -1,15 +1,11 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSessionFromRequest } from '@/lib/auth/request-session';
+import { parsePositiveIntRecordId } from '@/lib/highlights/parse-record-id';
 
 type Params = {
   params: Promise<{ id: string }>;
 };
-
-function parseId(id: string) {
-  const parsed = Number(id);
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
-}
 
 export async function PATCH(request: Request, { params }: Params) {
   try {
@@ -19,7 +15,7 @@ export async function PATCH(request: Request, { params }: Params) {
     }
 
     const { id } = await params;
-    const itemId = parseId(id);
+    const itemId = parsePositiveIntRecordId(id);
     if (!itemId) {
       return NextResponse.json({ error: '无效的记录 ID。' }, { status: 400 });
     }
@@ -63,7 +59,7 @@ export async function DELETE(request: Request, { params }: Params) {
     }
 
     const { id } = await params;
-    const itemId = parseId(id);
+    const itemId = parsePositiveIntRecordId(id);
     if (!itemId) {
       return NextResponse.json({ error: '无效的记录 ID。' }, { status: 400 });
     }

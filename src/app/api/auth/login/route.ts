@@ -1,25 +1,15 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { normalizeLoginIdentifier } from '@/lib/auth/login-identifier';
 import { isLoginRateLimited } from '@/lib/auth/rate-limit';
 import { verifyPassword } from '@/lib/auth/password';
 import { createSession, rotateSession } from '@/lib/auth/session';
 import { getSessionCookieOptions, SESSION_COOKIE_NAME } from '@/lib/auth/cookies';
+import { getClientIpFromRequest } from '@/lib/http/client-ip';
 import { loginSchema } from '@/lib/validators/auth';
 
 const LOCK_THRESHOLD = 10;
 const LOCK_MINUTES = 15;
-
-function getClientIp(request: Request) {
-  const xff = request.headers.get('x-forwarded-for');
-  if (xff) {
-    return xff.split(',')[0]?.trim() ?? 'unknown';
-  }
-  return request.headers.get('x-real-ip') ?? 'unknown';
-}
-
-function normalizeIdentifier(identifier: string) {
-  return identifier.includes('@') ? identifier.toLowerCase() : identifier;
-}
 
 export async function POST(request: Request) {
   try {
@@ -38,8 +28,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const ip = getClientIp(request);
-    const identifier = normalizeIdentifier(parsed.data.identifier.trim());
+    const ip = getClientIpFromRequest(request);
+    const identifier = normalizeLoginIdentifier(parsed.data.identifier.trim());
     const password = parsed.data.password;
 
     const limited = await isLoginRateLimited(ip, identifier);
