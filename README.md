@@ -70,7 +70,26 @@ npm run dev
 
 详见 `docs/deploy.md`。
 
-## Cursor 规范
+## OpenSpec SDD
 
-- 项目规则：`.cursor/rules/*`
-- 项目技能：`.cursor/skills/*`
+本仓库使用 [OpenSpec](https://github.com/Fission-AI/OpenSpec) 管理规格驱动开发：
+
+- 当前系统规格：`openspec/specs/*/spec.md`
+- 进行中的变更：`openspec/changes/<change-name>/`
+- 已归档的变更：`openspec/changes/archive/`
+- 项目级约束：`AGENTS.md` 与 `openspec/config.yaml`
+
+常用流程：
+
+```bash
+openspec new change <change-name>
+openspec status --change <change-name>
+openspec validate --all --strict
+openspec archive <change-name>
+```
+
+在 Codex 中可直接使用 `/opsx:explore`、`/opsx:propose`、`/opsx:apply` 与 `/opsx:archive`。
+
+## 浏览器 E2E
+
+本地 Playwright E2E 使用说明见 `docs/testing-playwright.md`。

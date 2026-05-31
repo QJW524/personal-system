@@ -1,0 +1,28 @@
+schema: spec-driven
+
+context: |
+  Personal System is an existing Next.js 16 application written in TypeScript.
+  It uses React 19, Prisma 6, PostgreSQL, Redis sessions, Vitest, Docker Compose,
+  and GitHub Actions deployment to a VPS.
+
+  Before editing Next.js code, read the relevant guide in node_modules/next/dist/docs/
+  because this repository intentionally tracks a breaking-change Next.js version.
+
+  Prefer Server Components. Keep Prisma access in src/lib/* or route handlers.
+  API routes use stable JSON responses and explicit HTTP statuses.
+  Preserve focused changes, update .env.example for new environment variables,
+  and run npm run test:run, npm run lint, and npm run build before completion.
+
+rules:
+  proposal:
+    - State user-visible behavior and explicitly list non-goals for broad requests.
+    - Identify environment variable, database migration, and deployment impact.
+  specs:
+    - Write observable behavior with concrete WHEN and THEN scenarios.
+    - Keep each capability narrow enough to understand and validate independently.
+  design:
+    - Follow existing repository patterns and document any Next.js 16 API assumptions.
+    - Explain data ownership and failure handling for database-backed behavior.
+  tasks:
+    - Keep tasks small, ordered, and independently verifiable.
+    - Include focused tests and the final test, lint, and build quality gates.
