@@ -1,36 +1,36 @@
-# VPS Deployment Specification
+# VPS 部署规格说明
 
 ## Purpose
 
-Define the GitHub Actions and Docker Compose deployment baseline for the VPS.
+定义面向 VPS 的 GitHub Actions 与 Docker Compose 部署基线，覆盖自动触发、手动触发和远程发布顺序。
 
 ## Requirements
 
-### Requirement: Deployment triggers
-The system SHALL offer a GitHub Actions deployment workflow that runs on pushes to `main` and on manual dispatch.
+### Requirement: 部署触发方式
+系统 SHALL 提供一个 GitHub Actions 部署工作流，可在向 `main` 推送代码时触发，也可通过手动 dispatch 触发。
 
-#### Scenario: Code is pushed to main
-- **WHEN** a commit is pushed to the `main` branch
-- **THEN** GitHub Actions invokes the remote deployment script over SSH
+#### Scenario: 代码被推送到 main
+- **WHEN** 某个提交被推送到 `main` 分支
+- **THEN** GitHub Actions 会通过 SSH 调用远程部署脚本
 
-#### Scenario: A manual deployment is requested
-- **WHEN** an operator manually dispatches the deployment workflow
-- **THEN** GitHub Actions invokes the same remote deployment script over SSH
+#### Scenario: 请求手动部署
+- **WHEN** 操作员手动 dispatch 部署工作流
+- **THEN** GitHub Actions 会通过 SSH 调用同一份远程部署脚本
 
-### Requirement: Ordered Docker Compose rollout
-The remote deployment script SHALL update the `main` checkout, build images, start PostgreSQL and Redis, run Prisma production migrations, and then update the web service.
+### Requirement: 有序的 Docker Compose 发布流程
+远程部署脚本 SHALL 更新 `main` 检出、构建镜像、启动 PostgreSQL 和 Redis、运行 Prisma 生产迁移，然后再更新 Web 服务。
 
-#### Scenario: A deployment runs successfully
-- **WHEN** the deployment script runs with a valid `APP_DIR`
-- **THEN** it pulls `origin/main`, builds images, starts `db` and `redis`, runs the `migrate` service, starts `web`, and prints service status
+#### Scenario: 某次部署成功运行
+- **WHEN** 部署脚本在有效的 `APP_DIR` 下运行
+- **THEN** 它会拉取 `origin/main`、构建镜像、启动 `db` 和 `redis`、运行 `migrate` 服务、启动 `web`，并输出服务状态
 
-#### Scenario: A production migration fails
-- **WHEN** the Prisma production migration exits unsuccessfully
-- **THEN** the deployment script exits before updating the web service
+#### Scenario: 生产迁移失败
+- **WHEN** Prisma 生产迁移以失败状态退出
+- **THEN** 部署脚本会在更新 Web 服务之前退出
 
-### Requirement: SSH connection verification
-The system SHALL provide a manually dispatched GitHub Actions workflow for checking VPS SSH access and Docker availability.
+### Requirement: SSH 连接校验
+系统 SHALL 提供一个可手动 dispatch 的 GitHub Actions 工作流，用于检查 VPS 的 SSH 访问与 Docker 可用性。
 
-#### Scenario: An operator runs the connection check
-- **WHEN** the operator manually dispatches the connection verification workflow
-- **THEN** GitHub Actions connects to the VPS and reports basic host and Docker information
+#### Scenario: 操作员运行连接检查
+- **WHEN** 操作员手动 dispatch 连接校验工作流
+- **THEN** GitHub Actions 会连接到 VPS，并报告基础主机信息与 Docker 信息

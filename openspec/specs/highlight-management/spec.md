@@ -1,58 +1,58 @@
-# Highlight Management Specification
+# Highlight 管理规格说明
 
 ## Purpose
 
-Define authenticated, per-user CRUD operations for homepage highlights.
+定义认证后的、按用户隔离的首页 Highlight CRUD 流程，以及与站点 Profile 归属相关的访问边界。
 
 ## Requirements
 
-### Requirement: User-owned profile
-The system SHALL associate highlights with the authenticated user's site profile. It SHALL create a default profile when the user does not yet have one.
+### Requirement: 用户归属的 Profile
+系统 SHALL 将 Highlight 关联到认证用户的站点 Profile。当用户尚未拥有 Profile 时，它 SHALL 创建一个默认 Profile。
 
-#### Scenario: A user accesses highlights for the first time
-- **WHEN** an authenticated user without a site profile requests or creates highlights
-- **THEN** the system creates a default profile bound to that user before accessing highlights
+#### Scenario: 用户首次访问 Highlight
+- **WHEN** 一个没有站点 Profile 的认证用户请求或创建 Highlight
+- **THEN** 系统会先创建一个绑定到该用户的默认 Profile，再访问 Highlight
 
-### Requirement: Highlight listing
-The system SHALL list only highlights owned by the authenticated user's profile, ordered by creation time ascending.
+### Requirement: Highlight 列表
+系统 SHALL 只列出属于认证用户 Profile 的 Highlight，并按创建时间升序排序。
 
-#### Scenario: An authenticated user lists highlights
-- **WHEN** an authenticated user calls `GET /api/highlights`
-- **THEN** the system returns that user's highlights ordered from oldest to newest
+#### Scenario: 认证用户列出 Highlight
+- **WHEN** 认证用户调用 `GET /api/highlights`
+- **THEN** 系统会返回该用户的 Highlight，并按从旧到新的顺序排列
 
-#### Scenario: An unauthenticated visitor lists highlights
-- **WHEN** a visitor without a valid session calls `GET /api/highlights`
-- **THEN** the system returns HTTP `401`
+#### Scenario: 未认证访客列出 Highlight
+- **WHEN** 一个没有有效会话的访客调用 `GET /api/highlights`
+- **THEN** 系统会返回 HTTP `401`
 
-### Requirement: Highlight creation
-The system SHALL allow an authenticated user to create a highlight with a non-empty trimmed title and summary.
+### Requirement: Highlight 创建
+系统 SHALL 允许认证用户使用去除首尾空白后仍非空的标题和摘要来创建 Highlight。
 
-#### Scenario: An authenticated user submits a valid highlight
-- **WHEN** an authenticated user calls `POST /api/highlights` with a non-empty title and summary
-- **THEN** the system creates the highlight under that user's profile and returns HTTP `201`
+#### Scenario: 认证用户提交有效 Highlight
+- **WHEN** 认证用户使用非空标题和摘要调用 `POST /api/highlights`
+- **THEN** 系统会在该用户的 Profile 下创建 Highlight，并返回 HTTP `201`
 
-#### Scenario: A highlight title or summary is blank
-- **WHEN** an authenticated user submits a blank title or summary
-- **THEN** the system returns HTTP `400`
+#### Scenario: Highlight 标题或摘要为空
+- **WHEN** 认证用户提交空白标题或空白摘要
+- **THEN** 系统会返回 HTTP `400`
 
-### Requirement: Highlight update
-The system SHALL allow an authenticated user to update a highlight owned by their profile and SHALL reject invalid identifiers, blank content, or inaccessible records.
+### Requirement: Highlight 更新
+系统 SHALL 允许认证用户更新属于自己 Profile 的 Highlight，并 SHALL 拒绝无效标识、空白内容或不可访问的记录。
 
-#### Scenario: A user updates an owned highlight
-- **WHEN** an authenticated user calls `PATCH /api/highlights/:id` for an owned highlight with non-empty content
-- **THEN** the system updates and returns the highlight
+#### Scenario: 用户更新自己拥有的 Highlight
+- **WHEN** 认证用户针对自己拥有的 Highlight，携带非空内容调用 `PATCH /api/highlights/:id`
+- **THEN** 系统会更新并返回该 Highlight
 
-#### Scenario: A user updates a highlight they do not own
-- **WHEN** an authenticated user calls `PATCH /api/highlights/:id` for a missing or unowned highlight
-- **THEN** the system returns HTTP `404`
+#### Scenario: 用户更新不属于自己的 Highlight
+- **WHEN** 认证用户针对不存在或不属于自己的 Highlight 调用 `PATCH /api/highlights/:id`
+- **THEN** 系统会返回 HTTP `404`
 
-### Requirement: Highlight deletion
-The system SHALL allow an authenticated user to delete a highlight owned by their profile.
+### Requirement: Highlight 删除
+系统 SHALL 允许认证用户删除属于自己 Profile 的 Highlight。
 
-#### Scenario: A user deletes an owned highlight
-- **WHEN** an authenticated user calls `DELETE /api/highlights/:id` for an owned highlight
-- **THEN** the system deletes it and returns success
+#### Scenario: 用户删除自己拥有的 Highlight
+- **WHEN** 认证用户针对自己拥有的 Highlight 调用 `DELETE /api/highlights/:id`
+- **THEN** 系统会删除该 Highlight 并返回成功结果
 
-#### Scenario: A user deletes a highlight they do not own
-- **WHEN** an authenticated user calls `DELETE /api/highlights/:id` for a missing or unowned highlight
-- **THEN** the system returns HTTP `404`
+#### Scenario: 用户删除不属于自己的 Highlight
+- **WHEN** 认证用户针对不存在或不属于自己的 Highlight 调用 `DELETE /api/highlights/:id`
+- **THEN** 系统会返回 HTTP `404`

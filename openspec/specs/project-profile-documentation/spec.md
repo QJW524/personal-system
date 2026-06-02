@@ -1,23 +1,23 @@
-# project-profile-documentation Specification
+# 项目档案文档规格说明
 
 ## Purpose
 
-Define the maintained repository document used for resume-style and interview-style project introductions.
+定义仓库中持续维护的项目档案文档，用于简历式和面试式介绍，并作为统一更新项目背景、技术架构与工程成果的对外叙述入口。
 ## Requirements
-### Requirement: Maintained project profile document
-The repository SHALL provide a maintained project profile document at `docs/project-profile.md` for resume-style and interview-style introductions. The document SHALL summarize the project in Chinese and SHALL include project background, technical architecture, and core engineering achievements.
+### Requirement: 持续维护的项目档案文档
+仓库 SHALL 在 `docs/project-profile.md` 提供一份持续维护的项目档案文档，用于简历式和面试式介绍。该文档 SHALL 使用中文概述项目，并 SHALL 包含项目背景、技术架构与核心工程成果。
 
-#### Scenario: A contributor opens the maintained project profile
-- **WHEN** a contributor reads `docs/project-profile.md`
-- **THEN** the contributor can find a structured Chinese summary covering the project's background, technical stack, and key engineering outcomes
+#### Scenario: 贡献者打开已维护的项目档案
+- **WHEN** 贡献者阅读 `docs/project-profile.md`
+- **THEN** 贡献者可以找到一份结构化的中文总结，覆盖项目背景、技术栈和关键工程结果
 
-#### Scenario: The project evolves after new iterations
-- **WHEN** a contributor needs to update the external project narrative after new capabilities or engineering work land
-- **THEN** the contributor updates the same maintained document instead of creating disconnected summary notes elsewhere
+#### Scenario: 项目在新一轮迭代后继续演进
+- **WHEN** 贡献者需要在新能力或新工程工作落地后更新对外项目叙述
+- **THEN** 贡献者会更新同一份维护中的文档，而不是在别处创建彼此割裂的总结笔记
 
-### Requirement: Repository entry point for the project profile
-The repository SHALL provide a lightweight entry point to the maintained project profile from `README.md`.
+### Requirement: 项目档案的仓库入口
+仓库 SHALL 在 `README.md` 中为这份持续维护的项目档案提供一个轻量入口。
 
-#### Scenario: A contributor reads the repository overview
-- **WHEN** a contributor scans `README.md` for supporting project documents
-- **THEN** the contributor can discover the maintained project profile document and navigate to it directly
+#### Scenario: 贡献者阅读仓库概览
+- **WHEN** 贡献者在 `README.md` 中查找配套项目文档
+- **THEN** 贡献者可以发现这份持续维护的项目档案文档，并直接跳转过去
