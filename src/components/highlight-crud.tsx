@@ -63,10 +63,10 @@ export function HighlightCrud({ initialHighlights }: HighlightCrudProps) {
         }),
       });
 
-      setItems((prev) => [...prev, data.item]);
+      setItems((prev) => [data.item, ...prev]);
       setTitle('');
       setSummary('');
-      setStatus({ type: 'success', text: '新增成功。' });
+      setStatus({ type: 'success', text: '项目已记录。' });
     } catch (error) {
       setStatus({ type: 'error', text: (error as Error).message });
     } finally {
@@ -105,7 +105,7 @@ export function HighlightCrud({ initialHighlights }: HighlightCrudProps) {
 
       setItems((prev) => prev.map((item) => (item.id === editingId ? data.item : item)));
       cancelEdit();
-      setStatus({ type: 'success', text: '更新成功。' });
+      setStatus({ type: 'success', text: '项目已更新。' });
     } catch (error) {
       setStatus({ type: 'error', text: (error as Error).message });
     } finally {
@@ -125,7 +125,7 @@ export function HighlightCrud({ initialHighlights }: HighlightCrudProps) {
         method: 'DELETE',
       });
       setItems((prev) => prev.filter((item) => item.id !== id));
-      setStatus({ type: 'success', text: '删除成功。' });
+      setStatus({ type: 'success', text: '项目已移除。' });
     } catch (error) {
       setStatus({ type: 'error', text: (error as Error).message });
     } finally {
@@ -136,19 +136,27 @@ export function HighlightCrud({ initialHighlights }: HighlightCrudProps) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.createBox}>
+        <div className={styles.createHeader}>
+          <div>
+            <p className={styles.createEyebrow}>Quick Capture</p>
+            <h3 className={styles.createTitle}>先记下当前项目，再写一句下一步动作。</h3>
+          </div>
+          <p className={styles.createBody}>这轮先让记录足够轻，后续再在同一个改造流程里补状态、详情和更新历史。</p>
+        </div>
+
         <input
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          placeholder='标题，例如：完成后台重构'
+          placeholder='项目名，例如：重构登录页入口体验'
         />
         <textarea
           value={summary}
           onChange={(event) => setSummary(event.target.value)}
-          placeholder='一句话描述你最近在做什么'
+          placeholder='下一步动作，例如：整理登录页价值说明文案'
           rows={3}
         />
         <button type='button' onClick={createItem} disabled={!canCreate || submitting}>
-          新增
+          新增项目
         </button>
       </div>
 
@@ -178,11 +186,19 @@ export function HighlightCrud({ initialHighlights }: HighlightCrudProps) {
               </div>
             ) : (
               <>
-                <h3>{item.title}</h3>
-                <p>{item.summary}</p>
+                <div className={styles.itemMeta}>
+                  <p className={styles.itemEyebrow}>Project</p>
+                  <h3>{item.title}</h3>
+                </div>
+
+                <div className={styles.nextActionBox}>
+                  <p className={styles.nextActionLabel}>Next Action</p>
+                  <p>{item.summary}</p>
+                </div>
+
                 <div className={styles.rowActions}>
                   <button type='button' onClick={() => startEdit(item)} disabled={submitting}>
-                    编辑
+                    更新
                   </button>
                   <button
                     type='button'
@@ -190,7 +206,7 @@ export function HighlightCrud({ initialHighlights }: HighlightCrudProps) {
                     className={styles.dangerButton}
                     disabled={submitting}
                   >
-                    删除
+                    移除
                   </button>
                 </div>
               </>
@@ -199,7 +215,7 @@ export function HighlightCrud({ initialHighlights }: HighlightCrudProps) {
         ))}
         {items.length === 0 && (
           <li className={styles.emptyItem}>
-            <p>还没有内容，先新增一条测试一下。</p>
+            <p>还没有项目卡片。先新增一个，把今天要推进的下一步动作写下来。</p>
           </li>
         )}
       </ul>

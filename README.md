@@ -93,3 +93,7 @@ openspec archive <change-name>
 ## 浏览器 E2E
 
 本地 Playwright E2E 使用说明见 `docs/testing-playwright.md`。
+
+## 项目介绍素材
+
+简历 / 面试使用的项目介绍沉淀在 `docs/project-profile.md`，后续能力迭代时优先更新该文档。

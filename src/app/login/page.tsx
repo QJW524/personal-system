@@ -3,6 +3,21 @@
 import { FormEvent, useMemo, useState } from 'react';
 import styles from './page.module.css';
 
+const workbenchValues = [
+  {
+    title: 'Capture Ideas',
+    text: '先记下项目名、当前状态和下一步动作，不让想法只留在脑子里。',
+  },
+  {
+    title: 'Track Momentum',
+    text: '登录后第一眼先看状态，再决定今天把时间放到哪个项目上。',
+  },
+  {
+    title: 'Stay Grounded',
+    text: '第一版只保留真正会日常使用的工作台信息，不堆复杂管理功能。',
+  },
+] as const;
+
 type AuthStatus = {
   type: 'success' | 'error';
   text: string;
@@ -116,21 +131,36 @@ export default function LoginPage() {
       <section className={styles.layout}>
         <aside className={styles.brandPanel}>
           <p className={styles.brandBadge}>Personal System</p>
-          <h1>管理你的内容与记录</h1>
-          <p>
-            统一管理个人站内容、亮点清单与系统配置。登录后进入主页工作台，支持持续迭代和长期维护。
+          <p className={styles.brandEyebrow}>Project Workbench</p>
+          <h1>把项目想法、推进状态和下一步动作收进一个地方。</h1>
+          <p className={styles.brandDescription}>
+            这不是一个泛泛的个人主页入口，而是一个你每天都愿意打开的项目工作台。先看当前状态，再回到具体项目的下一步动作。
           </p>
-          <ul className={styles.featureList}>
-            <li>用户名/邮箱双模式登录</li>
-            <li>Redis 会话，登录态稳定</li>
-            <li>注册后可立即使用系统</li>
-          </ul>
+
+          <div className={styles.featureGrid}>
+            {workbenchValues.map((item) => (
+              <article key={item.title} className={styles.featureCard}>
+                <p className={styles.featureTitle}>{item.title}</p>
+                <p className={styles.featureText}>{item.text}</p>
+              </article>
+            ))}
+          </div>
+
+          <section className={styles.rhythmNote} aria-label='daily rhythm'>
+            <p className={styles.rhythmLabel}>Daily Rhythm</p>
+            <p>今天推进什么、暂停什么、下一步做什么，应该在 10 秒内就能回到上下文。</p>
+          </section>
         </aside>
 
         <section className={styles.authCard}>
           <header className={styles.header}>
-            <h2>{mode === 'login' ? '欢迎回来' : '创建账号'}</h2>
-            <p>{mode === 'login' ? '请输入账号信息继续访问。' : '注册后可直接切换登录。'}</p>
+            <p className={styles.cardEyebrow}>{mode === 'login' ? 'Login' : 'Register'}</p>
+            <h2>{mode === 'login' ? '欢迎回来' : '创建你的工作台账号'}</h2>
+            <p>
+              {mode === 'login'
+                ? '输入账号信息，继续回到你的项目工作台。'
+                : '先注册账号，再直接切回登录流程开始使用。'}
+            </p>
           </header>
 
           <div className={styles.tabs}>
@@ -139,19 +169,25 @@ export default function LoginPage() {
               onClick={() => setMode('login')}
               className={mode === 'login' ? styles.tabActive : styles.tab}
             >
-              登录
+              Login
             </button>
             <button
               type='button'
               onClick={() => setMode('register')}
               className={mode === 'register' ? styles.tabActive : styles.tab}
             >
-              新用户注册
+              Register
             </button>
           </div>
 
           {status && (
             <p className={status.type === 'error' ? styles.errorBanner : styles.successBanner}>{status.text}</p>
+          )}
+
+          {mode === 'login' && (
+            <section className={styles.inlineNote} aria-label='login note'>
+              <p>支持用户名或邮箱登录，成功后会继续回到站内安全的目标路径。</p>
+            </section>
           )}
 
           {mode === 'login' ? (
@@ -175,7 +211,7 @@ export default function LoginPage() {
                   />
                 </label>
                 <button type='submit' disabled={!canLogin || loading} className={styles.primaryButton}>
-                  {loading ? '处理中...' : '登录并进入首页'}
+                  {loading ? '处理中...' : '登录并进入工作台'}
                 </button>
               </form>
             </section>
@@ -209,7 +245,7 @@ export default function LoginPage() {
                   />
                 </label>
                 <button type='submit' disabled={!canRegister || loading} className={styles.secondaryButton}>
-                  {loading ? '处理中...' : '注册账号'}
+                  {loading ? '处理中...' : '创建账号'}
                 </button>
               </form>
             </section>

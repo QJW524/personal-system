@@ -1,6 +1,9 @@
 :root {
   --background: #fcfcfd;
   --foreground: #101828;
+  --font-geist-sans:
+    'Segoe UI', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-geist-mono: 'Cascadia Code', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
 }
 
 html {

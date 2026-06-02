@@ -1,15 +1,48 @@
 .wrapper {
   display: grid;
-  gap: 12px;
+  gap: 14px;
+}
+
+.createBox,
+.item,
+.emptyItem {
+  border: 1px solid rgba(80, 67, 49, 0.12);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.76);
 }
 
 .createBox {
-  border: 1px solid #eaecf0;
-  border-radius: 10px;
-  padding: 12px;
+  padding: 18px;
+  display: grid;
+  gap: 12px;
+}
+
+.createHeader {
   display: grid;
   gap: 8px;
-  background: #ffffff;
+}
+
+.createEyebrow,
+.itemEyebrow,
+.nextActionLabel {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7471;
+  font-weight: 650;
+}
+
+.createTitle {
+  font-size: 20px;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: #18211f;
+}
+
+.createBody {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #4d5956;
 }
 
 .createBox input,
@@ -17,24 +50,51 @@
 .editBox input,
 .editBox textarea {
   width: 100%;
-  border: 1px solid #d0d5dd;
-  border-radius: 8px;
-  padding: 8px 10px;
+  border: 1px solid rgba(80, 67, 49, 0.16);
+  border-radius: 18px;
+  padding: 12px 14px;
   font-size: 14px;
-  color: #101828;
+  color: #18211f;
   font-family: inherit;
+  background: #fffdfa;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.createBox input:focus,
+.createBox textarea:focus,
+.editBox input:focus,
+.editBox textarea:focus {
+  outline: none;
+  border-color: #355142;
+  box-shadow: 0 0 0 4px rgba(53, 81, 66, 0.12);
+  background: #ffffff;
 }
 
 .createBox button,
 .rowActions button {
   width: fit-content;
-  border: 1px solid #d0d5dd;
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 13px;
-  color: #344054;
-  background: #ffffff;
+  border: 1px solid rgba(80, 67, 49, 0.14);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #223230;
+  background: #fffaf3;
   cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.createBox button:hover,
+.rowActions button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(66, 87, 76, 0.24);
+  background: #ffffff;
 }
 
 .createBox button:disabled,
@@ -46,60 +106,96 @@
 .list {
   list-style: none;
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .item {
-  border: 1px solid #eaecf0;
-  border-radius: 10px;
-  background: #ffffff;
-  padding: 12px;
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.itemMeta {
+  display: grid;
+  gap: 6px;
 }
 
 .item h3 {
-  margin-bottom: 6px;
-  color: #101828;
-  font-size: 16px;
+  color: #18211f;
+  font-size: 18px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
 }
 
-.item p {
-  color: #475467;
-  line-height: 1.6;
+.nextActionBox {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 18px;
+  background: #f5f2eb;
+  border: 1px solid rgba(80, 67, 49, 0.08);
+}
+
+.nextActionBox p:last-child {
+  color: #4d5956;
+  line-height: 1.7;
+  font-size: 14px;
 }
 
 .rowActions {
   display: flex;
   gap: 8px;
-  margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .dangerButton {
-  border-color: #fda29b !important;
-  color: #b42318 !important;
+  border-color: rgba(186, 73, 60, 0.2) !important;
+  color: #9f3127 !important;
+  background: #fff5f3 !important;
 }
 
 .ghostButton {
-  border-color: #d0d5dd !important;
+  border-color: rgba(80, 67, 49, 0.12) !important;
 }
 
 .editBox {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .emptyItem {
-  border: 1px dashed #d0d5dd;
-  border-radius: 10px;
-  padding: 12px;
-  background: #fcfcfd;
+  padding: 18px;
+}
+
+.emptyItem p {
+  color: #5d6764;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.successText,
+.errorText {
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .successText {
-  color: #027a48 !important;
-  font-size: 14px;
+  color: #1c5a3e !important;
 }
 
 .errorText {
-  color: #b42318 !important;
-  font-size: 14px;
+  color: #9f3127 !important;
+}
+
+@media (max-width: 640px) {
+  .createBox,
+  .item,
+  .emptyItem,
+  .createBox input,
+  .createBox textarea,
+  .editBox input,
+  .editBox textarea,
+  .nextActionBox {
+    border-radius: 18px;
+  }
 }
