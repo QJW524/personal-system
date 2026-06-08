@@ -6,7 +6,13 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # OpenSpec SDD workflow
 
-Use OpenSpec for repository changes:
+Use OpenSpec for behavior, architecture, data ownership, API contract, deployment, authentication, permission, or unclear multi-step repository changes.
+
+OpenSpec is not required for small, well-scoped edits such as typo fixes, UI copy tweaks, localized styling, documentation cleanup, straightforward refactors with no observable behavior change, or small bug fixes with an obvious root cause.
+
+If a small edit grows into a behavior, data model, API, security, deployment, or architecture change, pause and create an OpenSpec change before continuing.
+
+When OpenSpec applies, use this workflow:
 
 1. Explore an idea before implementation when requirements are unclear.
 2. Start a change with `/opsx:propose <description>` or `openspec new change <kebab-case-name>`.
