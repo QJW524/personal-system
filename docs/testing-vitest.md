@@ -64,7 +64,7 @@
 
 ## CI 与质量门槛
 
-建议在合并前至少执行：`npm run test:run` 与仓库既有要求 `npm run lint`、`npm run build`（见 `AGENTS.md`）。
+建议在合并前执行：`npm run verify`。该命令会串联 OpenSpec 严格校验、`npm run test:run`、`npm run lint` 与 `npm run build`（见 `AGENTS.md`）。
 
 ## 未覆盖与后续方向
 

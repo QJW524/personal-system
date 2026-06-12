@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "verify": "openspec validate --all --strict && npm run test:run && npm run lint && npm run build",
     "build:clean": "node -e \"const fs=require('fs');try{fs.rmSync('.next',{recursive:true,force:true})}catch(e){if(e.code!=='ENOENT')throw e}\" && next build",
     "start": "next start",
     "lint": "eslint .",

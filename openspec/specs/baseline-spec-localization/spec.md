@@ -1,7 +1,8 @@
 # baseline-spec-localization Specification
 
 ## Purpose
-TBD - created by archiving change translate-baseline-specs-zh-cn. Update Purpose after archive.
+
+定义 `openspec/specs/` 基线规格的人类可读语言与结构维护要求，确保简体中文说明与 OpenSpec 校验锚点长期保持一致。
 ## Requirements
 ### Requirement: 可直接阅读的中文基线规格
 仓库 SHALL 在 `openspec/specs/` 中维护面向贡献者可直接阅读的简体中文基线规格文本，并在更新时保留 OpenSpec 校验依赖的结构关键字、目录约定与既有能力语义。

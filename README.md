@@ -56,6 +56,7 @@ npm run dev
 - `npm run db:migrate`：本地开发迁移
 - `npm run db:deploy`：生产环境迁移
 - `npm run db:seed`：写入初始化数据
+- `npm run verify`：执行 OpenSpec 严格校验、Vitest、lint 和 production build
 
 ## 健康检查
 
@@ -89,6 +90,16 @@ openspec archive <change-name>
 ```
 
 在 Codex 中可直接使用 `/opsx:explore`、`/opsx:propose`、`/opsx:apply` 与 `/opsx:archive`。
+
+代码变更的默认收尾流程：
+
+1. 实现完成后先运行 `npm run verify`。
+2. 由独立 Codex reviewer 或不继承实现推理历史的独立上下文审查需求、OpenSpec artifacts、目标 diff 和验证证据。
+3. 修复所有已确认的 `Critical` 与 `Important` findings；有争议的高优先级问题需提供技术证据并交由独立 reviewer 复审。
+4. Review 和问题处理完成后重新运行 `npm run verify`，将这次结果作为最终验证证据。
+5. 在 PR 或交接记录中填写 reviewer、findings 处置和最终验证结果。
+
+`Minor` findings 可以修复、记录后续事项或说明不处理理由。当前是个人项目，完成独立 Codex review 和 review 后验证即可，不要求另一个 GitHub 用户提供 PR approval。
 
 ## 浏览器 E2E
 

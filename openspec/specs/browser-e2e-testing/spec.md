@@ -1,7 +1,8 @@
 # 浏览器 E2E 测试规格说明
 
 ## Purpose
-待补充 - 该 spec 由归档 change `add-playwright-e2e` 时创建，归档后需要补全 Purpose。
+
+定义本仓库本地 Playwright 浏览器 E2E 测试基线，覆盖 Chromium 运行器、关键认证旅程、临时测试用户隔离、破坏性清理保护与失败诊断产物。
 ## Requirements
 ### Requirement: 本地 Chromium E2E 运行器
 仓库 SHALL 提供一套本地 Playwright E2E 运行器，默认使用 Chromium，并通过 Playwright 的 `webServer` 集成启动 Next.js 应用。
