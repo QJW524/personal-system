@@ -68,6 +68,7 @@ npm run dev
 - 连接检查：`.github/workflows/verify-connection.yml`
 - 自动部署：`.github/workflows/deploy.yml`
 - VPS 端部署脚本：`scripts/deploy.sh`
+- 生产变量：由 GitHub `product/PRODUCTION_ENV` 多行 Secret 在部署前自动同步，VPS 无需手工编辑 `.env`
 
 详见 `docs/deploy.md`。
 

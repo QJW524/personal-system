@@ -7,7 +7,10 @@
 ```mermaid
 flowchart LR
   devPush[PushToMain] --> gha[GitHubActionsDeployWorkflow]
-  gha --> sshLogin[SSHToVPS]
+  gha --> envSecret[ReadProductionEnvSecret]
+  envSecret --> envValidate[ValidateDotenv]
+  envValidate --> envSync[AtomicSyncToVPS]
+  envSync --> sshLogin[SSHToVPS]
   sshLogin --> deploySh[scripts/deploy.sh]
   deploySh --> gitPull[git pull origin main]
   deploySh --> composeBuild[docker compose build]
@@ -21,7 +24,7 @@ flowchart LR
 
 - `.github/workflows/deploy.yml`
   - 触发时机：`push main` 或手动触发。
-  - 行为：读取 `product` 环境 secrets，通过 SSH 登录 VPS，执行 `scripts/deploy.sh`。
+  - 行为：读取 `product` 环境 secrets，校验并原子同步生产 `.env`，然后通过 SSH 登录 VPS 执行 `scripts/deploy.sh`。
 
 - `scripts/deploy.sh`
   - 服务器部署入口脚本。
@@ -51,18 +54,26 @@ flowchart LR
 - `VPS_USER`: SSH 登录用户（建议 `deploy`）
 - `VPS_SSH_KEY`: Actions 登录 VPS 的私钥全文
 - `APP_DIR`: 项目在 VPS 上路径（例如 `/opt/personal-system`）
+- `PRODUCTION_ENV`: 完整生产 dotenv 内容；部署前自动同步到 `APP_DIR/.env`
 
 ## 5. 发布时你最该看哪几步
 
 1. GitHub Actions 日志是否成功执行到 SSH 步骤。
-2. VPS 上 `git rev-parse --short HEAD` 是否等于远端最新 commit。
-3. `docker compose ps` 里 `db` 是否 healthy、`web` 是否 up。
-4. `/api/health` 是否返回 `status: ok`。
+2. `Sync production environment` 是否通过本地格式校验和远端 Compose 校验。
+3. VPS 上 `git rev-parse --short HEAD` 是否等于远端最新 commit。
+4. `docker compose ps` 里 `db` 是否 healthy、`web` 是否 up。
+5. `/api/health` 是否返回 `status: ok`。
 
 ## 6. 常见问题速查
 
 - `The ssh-private-key argument is empty`
   - Secret 名称不匹配，或 workflow 未绑定对应 `environment`。
+
+- `PRODUCTION_ENV is empty or unavailable`
+  - 未在 `product` environment 配置完整 dotenv Secret。
+
+- dotenv 或 Compose 校验失败
+  - workflow 会在替换 `.env` 前退出；修复完整 `PRODUCTION_ENV` 后重新触发，不需要登录 VPS 手工编辑。
 
 - `prisma: not found`
   - 把迁移跑在 `web` 里导致。应使用 `migrate` 服务执行迁移。

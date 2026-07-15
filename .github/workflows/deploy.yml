@@ -8,6 +8,7 @@
 # - VPS_HOST: VPS IP 或域名
 # - VPS_USER: 登录用户（建议 deploy）
 # - APP_DIR: 项目在 VPS 的绝对路径
+# - PRODUCTION_ENV: 完整生产 dotenv 内容（多行 Secret）
 
 name: deploy
 
@@ -16,6 +17,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+
+concurrency:
+  group: personal-system-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -35,6 +40,37 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Sync production environment
+        env:
+          APP_DIR: ${{ secrets.APP_DIR }}
+          PRODUCTION_ENV: ${{ secrets.PRODUCTION_ENV }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          set -eu
+
+          LOCAL_ENV="${RUNNER_TEMP}/production.env"
+          REMOTE_ENV="${APP_DIR}/.env.${GITHUB_RUN_ID}.${GITHUB_RUN_ATTEMPT}.tmp"
+          trap 'rm -f "${LOCAL_ENV}"' EXIT
+
+          if [ -z "${PRODUCTION_ENV}" ]; then
+            echo '::error::PRODUCTION_ENV is empty or unavailable'
+            exit 1
+          fi
+
+          umask 077
+          printf '%s\n' "${PRODUCTION_ENV}" > "${LOCAL_ENV}"
+          node scripts/validate-production-env.mjs "${LOCAL_ENV}"
+
+          if ! docker compose --env-file "${LOCAL_ENV}" config -q >/dev/null 2>&1; then
+            echo '::error::PRODUCTION_ENV is incompatible with the current docker-compose.yml'
+            exit 1
+          fi
+
+          scp "${LOCAL_ENV}" "${VPS_USER}@${VPS_HOST}:${REMOTE_ENV}"
+          ssh "${VPS_USER}@${VPS_HOST}" \
+            "set -eu; cd '${APP_DIR}'; trap 'rm -f \"${REMOTE_ENV}\"' EXIT; chmod 600 '${REMOTE_ENV}'; if ! docker compose --env-file '${REMOTE_ENV}' config -q >/dev/null 2>&1; then echo 'PRODUCTION_ENV failed remote Compose validation' >&2; exit 1; fi; if [ -f .env ]; then cp -p .env .env.previous; fi; mv '${REMOTE_ENV}' .env; chmod 600 .env; trap - EXIT"
 
       - name: Trigger remote deploy
         env:
