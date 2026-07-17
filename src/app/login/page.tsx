@@ -134,7 +134,7 @@ export default function LoginPage() {
           <p className={styles.brandEyebrow}>Project Workbench</p>
           <h1>把项目想法、推进状态和下一步动作收进一个地方。</h1>
           <p className={styles.brandDescription}>
-            这不是一个泛泛的个人主页入口，而是一个你每天都愿意打开的项目工作台。先看当前状态，再回到具体项目的下一步动作。
+            这不是一个泛泛的个人主页入口，而是一个你每天都愿意打开的项目工作台。先看当前状态，再回到具体项目的下一步动作。（重构流程版）
           </p>
 
           <div className={styles.featureGrid}>

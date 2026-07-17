@@ -42,3 +42,10 @@
 - **根因**：生产环境 `NODE_ENV=production` 时会话 Cookie 带 `Secure`。若用户通过 **HTTP** 访问（如直连 `:3000`）或反代未正确传递 `X-Forwarded-Proto: https`，浏览器会 **丢弃** Set-Cookie，后续请求无会话，middleware/首页再次重定向到登录。
 - **处理**：按请求的 `x-forwarded-proto` 与 URL 协议决定 `Secure`；支持环境变量 `SESSION_COOKIE_SECURE` 强制 true/false；登录成功后使用 `window.location.assign` 并支持 `?redirect=`。
 - **涉及文件**：`src/lib/auth/cookies.ts`、`src/app/api/auth/login/route.ts`、`src/app/api/auth/logout/route.ts`、`src/app/login/page.tsx`
+
+### 2026-07-17 — Windows Docker 开发环境修改源码后不热更新
+
+- **现象**：Next.js 16 应用运行在 Docker Desktop 中，本机修改 `src/` 下文件后，容器内文件内容已同步，但浏览器页面未更新，Web 容器日志也没有重新编译记录。
+- **根因**：源码通过 Windows 到 Linux 容器的 bind mount 正常同步，宿主机与容器内文件 SHA-256 一致；但 Next.js 16 默认使用 Turbopack，它在该挂载场景下没有可靠收到文件变更事件。已有的 `WATCHPACK_POLLING=true` 主要作用于 Webpack watcher。
+- **处理**：Docker 开发命令显式增加 `--webpack`，使用 `next dev --hostname 0.0.0.0 --webpack`，继续保留 `WATCHPACK_POLLING=true`；重建 Web 容器后确认 Next.js 以 Webpack 模式启动并能重新编译登录页。生产构建流程保持不变。
+- **涉及文件**：`Dockerfile`、`docker-compose.dev.yml`、`docs/problem-solving-log.md`

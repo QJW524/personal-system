@@ -11,6 +11,16 @@ FROM base AS deps
 COPY package.json package-lock.json ./
 RUN npm ci
 
+# Development image: keeps the full dependency tree and runs Next.js with HMR.
+# Source code is bind-mounted by docker-compose.dev.yml at runtime.
+FROM deps AS development
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+COPY . .
+RUN npx prisma generate
+EXPOSE 3000
+CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0", "--webpack"]
+
 FROM base AS builder
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules

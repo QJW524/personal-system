@@ -4,6 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "docker:dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build web",
+    "docker:dev:detached": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d web",
+    "docker:dev:down": "docker compose -f docker-compose.yml -f docker-compose.dev.yml down",
+    "docker:db:deploy": "docker compose -f docker-compose.yml -f docker-compose.dev.yml run --rm migrate",
+    "docker:db:seed": "docker compose -f docker-compose.yml -f docker-compose.dev.yml run --rm web npm run db:seed",
     "build": "next build",
     "verify": "openspec validate --all --strict && npm run test:run && npm run lint && npm run build",
     "build:clean": "node -e \"const fs=require('fs');try{fs.rmSync('.next',{recursive:true,force:true})}catch(e){if(e.code!=='ENOENT')throw e}\" && next build",

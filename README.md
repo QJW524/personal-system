@@ -4,6 +4,19 @@
 
 ## 本地开发
 
+Windows 上推荐使用完整 Docker 开发环境（支持源码热更新）。安装、首次初始化、日常命令和故障排查见 [`docs/local-docker-development.md`](docs/local-docker-development.md)。
+
+快速启动：
+
+```powershell
+Copy-Item .env.example .env
+npm run docker:db:deploy
+npm run docker:db:seed
+npm run docker:dev
+```
+
+以下步骤保留给“仅数据库与 Redis 使用 Docker、Next.js 在宿主机运行”的混合开发方式。
+
 1. 安装依赖：
 
 ```bash
